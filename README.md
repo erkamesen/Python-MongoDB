@@ -18,6 +18,19 @@ MongoDB için hazırladığım notlar.. <br>
 7.1 [find_one()](https://github.com/erkamesen/Python-MongoDB/edit/main/README.md#find_one) <br>
 7.2 [find()](https://github.com/erkamesen/Python-MongoDB/edit/main/README.md#find) <br>
 7.3 [find() ile Belirli Verileri Çekme](https://github.com/erkamesen/Python-MongoDB/edit/main/README.md#find-ile-belirli-verileri-%C3%A7ekme)
+8. [Query(Filtreleme Sorugları)](https://github.com/erkamesen/Python-MongoDB/edit/main/README.md#queryfiltreleme-sorgular%C4%B1) <br>
+8.1 [Advanced Query](https://github.com/erkamesen/Python-MongoDB/edit/main/README.md#advanced-query)
+9. [Sort(Sıralama) Sorgusu](https://github.com/erkamesen/Python-MongoDB/edit/main/README.md#sorts%C4%B1ralama-sorgusu)
+10. [and - or Sorguları](https://github.com/erkamesen/Python-MongoDB/edit/main/README.md#and---or-sorgular%C4%B1) <br>
+10.1 [and](https://github.com/erkamesen/Python-MongoDB/edit/main/README.md#and) <br>
+10.2 [or](https://github.com/erkamesen/Python-MongoDB/edit/main/README.md#or)
+11. [Update(Güncelleme) Sorguları](https://github.com/erkamesen/Python-MongoDB/edit/main/README.md#updateg%C3%BCncelleme-sorgular%C4%B1) <br>
+11.1 [update_one()](https://github.com/erkamesen/Python-MongoDB/edit/main/README.md#update_one) <br>
+11.2 [update_many()](https://github.com/erkamesen/Python-MongoDB/edit/main/README.md#update_many)
+12. [Limit Sorguları](https://github.com/erkamesen/Python-MongoDB/edit/main/README.md#limit-sorgular%C4%B1)
+13. [Delete Sorguları](https://github.com/erkamesen/Python-MongoDB/edit/main/README.md#delete-sorgular%C4%B1) <br>
+13.1 [delete_one()](https://github.com/erkamesen/Python-MongoDB/edit/main/README.md#delete_one) <br>
+13.2 [delete_many()](https://github.com/erkamesen/Python-MongoDB/edit/main/README.md#delete_many)
 <img width="2451" alt="mdb-vs-sql" src="https://user-images.githubusercontent.com/120065120/215347383-a9f102b0-fcd6-409c-88a7-0610230f6f9d.png">
 
 <!-- Table -->
@@ -261,11 +274,336 @@ for x in new_collection.find({},{ "_id": 0, "name": 1}):
 """
 ```
 
+## Query(Filtreleme) Sorguları
+Bir koleksiyondaki belgeleri bulurken, bir sorgu nesnesi kullanarak sonuca filtre uygulayabilirsiniz.
+find() yönteminin ilk bağımsız değişkeni bir sorgu nesnesidir ve aramayı sınırlandırmak için kullanılır.
+
+```
+myquery = { "address": "İstanbul" }
+mydoc = new_collection.find(myquery)
+
+for x in mydoc:
+  print(x) 
+"""
+{'_id': 2, 'name': 'Ensar', 'address': 'İstanbul'}
+{'_id': 4, 'name': 'Enes', 'address': 'İstanbul'}
+"""
+```
+
+### Advanced Query
+
+Daha detaylı sorgular için not ortalamalarının tutulduğu bir collection açalım.
+ve içerisine liste şeklinde notlarımızı yükleyelim
+```
+mydb = db["notlar"]
+notlar = [{"Adı":"Ali","Ortalama":63},
+          {"Adı":"Ayşe","Ortalama":82},
+          {"Adı":"Mehmet","Ortalama":18},
+          {"Adı":"Duygu","Ortalama":41},
+          {"Adı":"Buse","Ortalama":72},
+          {"Adı":"Orhan","Ortalama":26},
+          {"Adı":"Kerim","Ortalama":65},
+          {"Adı":"Mustafa","Ortalama":23},
+          {"Adı":"Şule","Ortalama":75},
+          {"Adı":"Baran","Ortalama":91},
+          {"Adı":"Kaan","Ortalama":74},
+          {"Adı":"Osman","Ortalama":62},
+          {"Adı":"Banu","Ortalama":84},
+          {"Adı":"Burhan","Ortalama":36},
+          {"Adı":"Oğuz","Ortalama":63},
+          {"Adı":"Ali","Ortalama":75}
+         ]
+mydb.insert_many(notlar)
+# <pymongo.results.InsertManyResult at 0x7f23655cff10>
+```
+![Seçim_057](https://user-images.githubusercontent.com/120065120/215504853-f3ea065a-b9be-4cf7-bd1e-5fcefc0e8382.png)
+
+Şimdi 50 ve üzeri not alanların dersi geçtiğini baz alalım ve buna göre greater than, less than i kodlarımıza ekleyelim.
+```
+$gt = greater than ">"
+$gte = greater than equal ">="
+$lt = less than "<"
+$lte = less than equal "<="
+$ne = not equal "!="
+$in = Karşısına gelen liste içindeki value ları getirir { field: { $in: [<value1>, <value2>, ... <valueN> ] } }
+$nin = Karşısına gelen liste içindeki value lar haricini getirir { field: { $nin: [<value1>, <value2>, ... <valueN> ] } }
+```
+DERSİ GEÇENLERİN İSİMLERİ:
+```
+for x in mydb.find({"Ortalama": { "$gte": 50 }},{"_id":0, "Adı":1}):
+    print(x)
+"""
+{'Adı': 'Ali'}
+{'Adı': 'Ayşe'}
+{'Adı': 'Buse'}
+{'Adı': 'Kerim'}
+{'Adı': 'Şule'}
+{'Adı': 'Baran'}
+{'Adı': 'Kaan'}
+{'Adı': 'Osman'}
+{'Adı': 'Banu'}
+"""   
+```
+DERSTEN KALANLARI ISIMLERİ VE NOTLARI
+```
+for x in mydb.find({"Ortalama": { "$lt": 50 }},{"_id":0}):
+    print(x)
+"""
+{'Adı': 'Mehmet', 'Ortalama': 18}
+{'Adı': 'Duygu', 'Ortalama': 41}
+{'Adı': 'Orhan', 'Ortalama': 26}
+{'Adı': 'Mustafa', 'Ortalama': 23}
+{'Adı': 'Burhan', 'Ortalama': 36}
+"""
+```
+## Sort(Sıralama) Sorgusu
+
+Sonucu artan veya azalan düzende sıralamak için sort() yöntemini kullanırız.
+sort() yöntemi, "fieldname" için bir parametre ve "yön" için bir parametre alır (artan yön, varsayılan yöndür).
+
+```
+sort("name", 1) #ascending ( Artan Yön )
+sort("name", -1) #descending ( Azalan Yön )
+```
+Ortalamalar için ARTAN YÖN
+```
+# Ortalamalar için ARTAN YÖN
+for x in mydb.find({},{"_id":0}).sort("Ortalama"):
+    print(x)
+"""
+{'Adı': 'Mehmet', 'Ortalama': 18}
+{'Adı': 'Mustafa', 'Ortalama': 23}
+{'Adı': 'Orhan', 'Ortalama': 26}
+{'Adı': 'Burhan', 'Ortalama': 36}
+{'Adı': 'Duygu', 'Ortalama': 41}
+{'Adı': 'Osman', 'Ortalama': 62}
+{'Adı': 'Ali', 'Ortalama': 63}
+{'Adı': 'Kerim', 'Ortalama': 65}
+{'Adı': 'Buse', 'Ortalama': 72}
+{'Adı': 'Kaan', 'Ortalama': 74}
+{'Adı': 'Şule', 'Ortalama': 75}
+{'Adı': 'Ayşe', 'Ortalama': 82}
+{'Adı': 'Banu', 'Ortalama': 84}
+{'Adı': 'Baran', 'Ortalama': 91}
+"""
+```
+Ortalamalar için AZALAN YÖN
+```
+for x in mydb.find({},{"_id":0}).sort("Ortalama", -1):
+    print(x)
+"""
+{'Adı': 'Baran', 'Ortalama': 91}
+{'Adı': 'Banu', 'Ortalama': 84}
+{'Adı': 'Ayşe', 'Ortalama': 82}
+{'Adı': 'Şule', 'Ortalama': 75}
+{'Adı': 'Kaan', 'Ortalama': 74}
+{'Adı': 'Buse', 'Ortalama': 72}
+{'Adı': 'Kerim', 'Ortalama': 65}
+{'Adı': 'Ali', 'Ortalama': 63}
+{'Adı': 'Osman', 'Ortalama': 62}
+{'Adı': 'Duygu', 'Ortalama': 41}
+{'Adı': 'Burhan', 'Ortalama': 36}
+{'Adı': 'Orhan', 'Ortalama': 26}
+{'Adı': 'Mustafa', 'Ortalama': 23}
+{'Adı': 'Mehmet', 'Ortalama': 18}
+"""
+```
+
+## and - or Sorguları
+
+ ```
+ and: find({$and:[{sorgu1:beklenen1},{sorgu2:beklenen2}]})
+ or: find({$or:[{sorgu1:beklenen1},{sorgu2:beklenen2}]})
+ ```
 
 
+### and 
+liste içindeki sorguların hepsinin doğru olduğu kayıdı getirir.
+
+ORTALAMASI 63 olanları getir
+```
+for x in mydb.find({"Ortalama":63},{"_id":0}):
+    print(x)
+"""
+{'Adı': 'Ali', 'Ortalama': 63}
+{'Adı': 'Oğuz', 'Ortalama': 63}
+"""
+```
+ORTALAMASI 63 ve ADI ALİ olanları getir
+```
+for x in mydb.find({"$and":[{"Ortalama":63},{"Adı":"Ali"}]},{"_id":0}):
+    print(x)
+# {'Adı': 'Ali', 'Ortalama': 63}
+```
+
+### or
+liste içindeki sorguların hepsini getirir.
+
+ORTALAMASI 63 yada ADI ALİ olanları getir
+```
+for x in mydb.find({"$or":[{"Ortalama":63},{"Adı":"Ali"}]},{"_id":0}):
+    print(x)
+"""
+{'Adı': 'Ali', 'Ortalama': 63}
+{'Adı': 'Oğuz', 'Ortalama': 63}
+{'Adı': 'Ali', 'Ortalama': 75}
+"""
+```
+
+## Update(Güncelleme) Sorguları
 
 
+### update_one()
+Bir kaydı veya MongoDB tabiri ile dökümanı update_one() yöntemini kullanarak güncelleyebilirsiniz.
+update_one() yönteminin ilk parametresi, hangi belgenin güncelleneceğini tanımlayan bir sorgu nesnesidir.
+İkinci parametre, belgenin yeni değerlerini tanımlayan bir nesnedir.
+Not: Sorgu birden fazla kayıt bulursa, yalnızca ilk oluşum güncellenir.
 
+my_query = {"eski kayıt":"eski deger"}
+new_values = {"$set":{"eski kayıt":"yeni deger"}}
+update_one(my_query, new_values)
 
+```
+# Banu Ortalama 84 geldi. şimdi bunun notunu 100 ile güncelleyelim.
+my_query = {"Ortalama":84}
+new_values = {"$set":{"Ortalama":100}}
+mydb.update_one(my_query, new_values)
+# 100 olarak değiştirdik kontrol edelim
+mydb.find_one({"Ortalama":100})
+
+```
+### update_many()
+uygulama aşamasında update_one() dan hiç bir farkı yok.
+Sorgunun koşullarını karşılayan tüm dökümanları güncellemek için update_many() yöntemini kullanırız.
+
+AF GELDİ ! ORTALAMASI 50 den AZ OLAN HERKESİ GEÇİRİYORUZ
+```
+my_query = {"Ortalama":{"$lt":50}}
+new_values = {"$set":{"Ortalama":50}}
+mydb.update_many(my_query, new_values)
+for x in mydb.find({},{"_id":0}):
+    print(x)
+"""
+{'Adı': 'Ali', 'Ortalama': 63}
+{'Adı': 'Ayşe', 'Ortalama': 82}
+{'Adı': 'Mehmet', 'Ortalama': 50}
+{'Adı': 'Duygu', 'Ortalama': 50}
+{'Adı': 'Buse', 'Ortalama': 72}
+{'Adı': 'Orhan', 'Ortalama': 50}
+{'Adı': 'Kerim', 'Ortalama': 65}
+{'Adı': 'Mustafa', 'Ortalama': 50}
+{'Adı': 'Şule', 'Ortalama': 75}
+{'Adı': 'Baran', 'Ortalama': 91}
+{'Adı': 'Kaan', 'Ortalama': 74}
+{'Adı': 'Osman', 'Ortalama': 62}
+{'Adı': 'Banu', 'Ortalama': 100}
+{'Adı': 'Burhan', 'Ortalama': 50}
+{'Adı': 'Oğuz', 'Ortalama': 63}
+{'Adı': 'Ali', 'Ortalama': 75}
+"""
+```
+
+> update_one() karşılayan ilk kayıdı değiştirir. update_many() ise tüm karşılayan kayıtları.
+
+## Limit Sorguları
+Sonucu sınırlamak için limit() yöntemini kullanırız.
+limit() yönteminin alacağı parametre ile kaç döküman döndüreceğini belirleriz.
+
+HEPSİ
+```
+for x in mydb.find():
+    print(x)
+"""
+{'_id': ObjectId('63d7dba343737eb5fa87bfb3'), 'Adı': 'Ali', 'Ortalama': 63}
+{'_id': ObjectId('63d7dba343737eb5fa87bfb4'), 'Adı': 'Ayşe', 'Ortalama': 82}
+{'_id': ObjectId('63d7dba343737eb5fa87bfb5'), 'Adı': 'Mehmet', 'Ortalama': 50}
+{'_id': ObjectId('63d7dba343737eb5fa87bfb6'), 'Adı': 'Duygu', 'Ortalama': 50}
+{'_id': ObjectId('63d7dba343737eb5fa87bfb7'), 'Adı': 'Buse', 'Ortalama': 72}
+{'_id': ObjectId('63d7dba343737eb5fa87bfb8'), 'Adı': 'Orhan', 'Ortalama': 50}
+{'_id': ObjectId('63d7dba343737eb5fa87bfb9'), 'Adı': 'Kerim', 'Ortalama': 65}
+{'_id': ObjectId('63d7dba343737eb5fa87bfba'), 'Adı': 'Mustafa', 'Ortalama': 50}
+{'_id': ObjectId('63d7dba343737eb5fa87bfbb'), 'Adı': 'Şule', 'Ortalama': 75}
+{'_id': ObjectId('63d7dba343737eb5fa87bfbc'), 'Adı': 'Baran', 'Ortalama': 91}
+{'_id': ObjectId('63d7dba343737eb5fa87bfbd'), 'Adı': 'Kaan', 'Ortalama': 74}
+{'_id': ObjectId('63d7dba343737eb5fa87bfbe'), 'Adı': 'Osman', 'Ortalama': 62}
+{'_id': ObjectId('63d7dba343737eb5fa87bfbf'), 'Adı': 'Banu', 'Ortalama': 100}
+{'_id': ObjectId('63d7dba343737eb5fa87bfc0'), 'Adı': 'Burhan', 'Ortalama': 50}
+{'_id': ObjectId('63d7dba343737eb5fa87bfc1'), 'Adı': 'Oğuz', 'Ortalama': 63}
+{'_id': ObjectId('63d7dba343737eb5fa87bfc2'), 'Adı': 'Ali', 'Ortalama': 75}
+"""
+```
+
+ilk 5 i 
+```
+for x in mydb.find().limit(5):
+    print(x)
+"""
+{'_id': ObjectId('63d7dba343737eb5fa87bfb3'), 'Adı': 'Ali', 'Ortalama': 63}
+{'_id': ObjectId('63d7dba343737eb5fa87bfb4'), 'Adı': 'Ayşe', 'Ortalama': 82}
+{'_id': ObjectId('63d7dba343737eb5fa87bfb5'), 'Adı': 'Mehmet', 'Ortalama': 50}
+{'_id': ObjectId('63d7dba343737eb5fa87bfb6'), 'Adı': 'Duygu', 'Ortalama': 50}
+{'_id': ObjectId('63d7dba343737eb5fa87bfb7'), 'Adı': 'Buse', 'Ortalama': 72}
+"""
+```
+
+## Delete Sorguları
+### delete_one()
+Bir belgeyi silmek için, delete_one() yöntemini kullanırız.
+delete_one() yönteminin ilk parametresi, hangi belgenin silineceğini tanımlayan bir sorgu nesnesidir.
+
+Not: Sorgu birden fazla belge bulursa yalnızca ilk geçtiği yer silinir.
+İsmi ayşe olan biri var mı diye kontrol ediyoruz
+```
+for x in mydb.find({"Adı":"Ayşe"}):
+    print(x)
+"""
+{'_id': ObjectId('63d7dba343737eb5fa87bfb4'), 'Adı': 'Ayşe', 'Ortalama': 82}
+"""
+```
+1 adet Ayşe var şimdi biz bunu silmek istiyoruz.Öncelikle kod kalabalığı olmasın diye kaydımızı alıp değişkene atayalım.
+```
+myquery = {"Adı":"Ayşe"}
+```
+Şimdi delete_one() ile silebiliriz.
+```
+mydb.delete_one(myquery)
+# <pymongo.results.DeleteResult at 0x7f23655ced70>
+```
+Kontrol edelim.
+```
+mydb.find_one({"Adı":"Ayşe"})
+# None
+```
+
+### delete_many()
+Birden fazla dökümanı silmek için, delete_many() yöntemini kullanın.
+
+NOTU 50 OLANLARI SİLİYORUZ.ÖNCE KONTROL EDELİM
+```
+for x in mydb.find({"Ortalama":50},{"_id":0}):
+    print(x)
+"""
+{'Adı': 'Mehmet', 'Ortalama': 50}
+{'Adı': 'Duygu', 'Ortalama': 50}
+{'Adı': 'Orhan', 'Ortalama': 50}
+{'Adı': 'Mustafa', 'Ortalama': 50}
+{'Adı': 'Burhan', 'Ortalama': 50}
+"""
+```
+Silinecek kayıdımızı değişkene atıyoruz.
+```
+myquery = {"Ortalama":50}
+```
+Silme işlemini gerçekleştiriyoruz.
+```
+mydb.delete_many(myquery)
+# <pymongo.results.DeleteResult at 0x7f23655ce800>
+```
+Tekrar kontrol edelim
+```
+for x in mydb.find({"Ortalama":50},{"_id":0}):
+    print(x)
+# None
+```
 
 
