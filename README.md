@@ -4,12 +4,20 @@ MongoDB için hazırladığım notlar.. <br>
 ![MongoDB_Logo svg](https://user-images.githubusercontent.com/120065120/215358239-4c22ed81-3bfe-46af-962b-b885b63359ce.png)
 
 # İçerik:
-- [Giriş](https://github.com/erkamesen/Python-MongoDB/edit/main/README.md#giri%C5%9F)
-- [NoSQL - MongoDB Nedir?](https://github.com/erkamesen/Python-MongoDB/edit/main/README.md#nosql-nedir-)
-- [NoSQL Veritabanı Özellikleri](https://github.com/erkamesen/Python-MongoDB/edit/main/README.md#nosql-veritaban%C4%B1-%C3%B6zellikleri)
-- [NoSQL Veritabanı Türleri](https://github.com/erkamesen/Python-MongoDB/edit/main/README.md#nosql-veritaban%C4%B1-t%C3%BCrleri)
-- [Başlangıç - Kurulum](https://github.com/erkamesen/Python-MongoDB/edit/main/README.md#ba%C5%9Flang%C4%B1%C3%A7---kurulum)
-
+1. [Giriş](https://github.com/erkamesen/Python-MongoDB/edit/main/README.md#giri%C5%9F)
+2. [NoSQL - MongoDB Nedir?](https://github.com/erkamesen/Python-MongoDB/edit/main/README.md#nosql-nedir-)
+3. [NoSQL Veritabanı Özellikleri](https://github.com/erkamesen/Python-MongoDB/edit/main/README.md#nosql-veritaban%C4%B1-%C3%B6zellikleri)
+4. [NoSQL Veritabanı Türleri](https://github.com/erkamesen/Python-MongoDB/edit/main/README.md#nosql-veritaban%C4%B1-t%C3%BCrleri)
+5. [Başlangıç - Kurulum](https://github.com/erkamesen/Python-MongoDB/edit/main/README.md#ba%C5%9Flang%C4%B1%C3%A7---kurulum) <br>
+5.1 [Cluster Oluşturma](https://github.com/erkamesen/Python-MongoDB/edit/main/README.md#cluster-olu%C5%9Fturma) <br>
+5.2 [Bağlantı](https://github.com/erkamesen/Python-MongoDB/edit/main/README.md#ba%C4%9Flant%C4%B1) 
+6. [Insert(Veri Ekleme) Sorgusu](https://github.com/erkamesen/Python-MongoDB/edit/main/README.md#insertveri-ekleme-sorgusu) <br>
+6.1 [insert_one()](https://github.com/erkamesen/Python-MongoDB/edit/main/README.md#insert_one) <br>
+6.2 [insert_many()](https://github.com/erkamesen/Python-MongoDB/edit/main/README.md#insert_many)
+7. [Find(Veri Bulma) Sorgusu](https://github.com/erkamesen/Python-MongoDB/edit/main/README.md#findveri-bulma-sorgusu) <br>
+7.1 [find_one()](https://github.com/erkamesen/Python-MongoDB/edit/main/README.md#find_one) <br>
+7.2 [find()](https://github.com/erkamesen/Python-MongoDB/edit/main/README.md#find) <br>
+7.3 [find() ile Belirli Verileri Çekme](https://github.com/erkamesen/Python-MongoDB/edit/main/README.md#find-ile-belirli-verileri-%C3%A7ekme)
 <img width="2451" alt="mdb-vs-sql" src="https://user-images.githubusercontent.com/120065120/215347383-a9f102b0-fcd6-409c-88a7-0610230f6f9d.png">
 
 <!-- Table -->
@@ -90,7 +98,7 @@ Eğer cloud üzerinde kullanacaksanız mail üzerinden gelen onay linkine tıkla
 - "Finish and Close" ve ardından "Go to Databases" diyerek clusterımıza gidiyoruz. Açılması bir müddet zaman alabilir.
 ![Seçim_050](https://user-images.githubusercontent.com/120065120/215360522-2a460355-5073-47d9-8804-ef9a602e793a.png)
 ***
-## Bağlantı 
+### Bağlantı 
 
 - Cluster hazır olduğunda aşağıdaki gibi görünmesi lazım. Buradan “CONNECT” tuşuna basıyoruz.
 ![Seçim_052](https://user-images.githubusercontent.com/120065120/215360790-7b2ec2c0-3f64-46b4-aae3-076de92edf68.png)
@@ -118,6 +126,143 @@ db["collectionAdı"] ile bir collection oluşturarak bunu new_collection adında
 db = myclient["veritabanıAdı"] #Veritabanı oluşturma
 new_collection = db["collectionAdı"] #collection oluşturma veya bağlanma
 ```
+
+## Insert(Veri Ekleme) Sorgusu
+### insert_one()
+Bir kayıdı yani MongoDB'de çağrıldığı şekliyle bir dökümanı bir collection a eklemek için insert_one() yöntemini kullanırız.
+insert_one() yönteminin ilk parametresi, eklemek istediğiniz belgedeki her alanın adlarını ve değerlerini içeren bir sözlüktür.
+
+```
+myclient = MongoClient("mongodb+srv://erkamesen:<yourpassword>@cluster1.dumyfbl.mongodb.net/?retryWrites=true&w=majority") #python ile bağlama
+db = myclient["mydatabase"] #Veritabanı oluşturma
+new_collection = db["customers"] #collection oluşturma veya bağlanma
+--- 
+new_data = {"name":"Erkam","City":"Karabük"}
+x = new_collection.insert_one(new_data)
+```
+![Seçim_056](https://user-images.githubusercontent.com/120065120/215444999-28c7e38c-f749-497b-9b8a-768c9d79fedb.png)
+
+insert_id
+
+```
+print(x.inserted_id)
+Result : 63d79461665fd3f1737213b1
+```
+---
+### insert_many()
+MongoDB'deki bir collection a birden çok döküman eklemek için insert_many() yöntemini kullanırız.
+insert_many() yönteminin ilk parametresi, eklemek istediğiniz verileri içeren sözlükleri içeren bir listedir:
+
+```
+mylist = [
+  { "name": "Amy", "address": "Apple st 652"},
+  { "name": "Hannah", "address": "Mountain 21"},
+  { "name": "Michael", "address": "Valley 345"},
+  { "name": "Sandy", "address": "Ocean blvd 2"},
+  { "name": "Betty", "address": "Green Grass 1"},
+  { "name": "Richard", "address": "Sky st 331"},
+  { "name": "Susan", "address": "One way 98"},
+  { "name": "Vicky", "address": "Yellow Garden 2"},
+  { "name": "Ben", "address": "Park Lane 38"},
+  { "name": "William", "address": "Central st 954"},
+  { "name": "Chuck", "address": "Main Road 989"},
+  { "name": "Viola", "address": "Sideway 1633"}
+]
+new_collection.insert_many(mylist)
+```
+Burda her bir row için otomatik bir unique ID verilecek istersek bunu kendimiz de belirtebiliriz.
+```
+# ID ye göre ekleme yapma 
+new_list_with_id = [
+    {"_id":1, "name": "Erkam", "address": "Karabük"},
+    {"_id":2, "name": "Ensar", "address": "İstanbul"},
+    {"_id":3, "name": "Duygu", "address": "Ankara"},
+    {"_id":4, "name": "Enes", "address": "İstanbul"},
+    {"_id":5, "name": "Ulaş", "address": "Sakarya"},
+    {"_id":6, "name": "Onur", "address": "Isparta"},
+    {"_id":7, "name": "Çelik", "address": "Bolu"},
+    
+]
+new_collection.insert_many(new_list_with_id)
+```
+
+## Find(Veri Bulma) Sorgusu
+MongoDB'de bir koleksiyondaki verileri bulmak için SQL de ki SELECT ifadesinin yerine MongoDB de find() ve find_one() yöntemlerini kullanırız.
+
+### find_one()
+MongoDB'deki bir koleksiyondan veri seçmek için find_one() yöntemini kullanabiliriz. Bu bize ilk satırda ki kayıdı verecektir.
+
+```
+x = new_collection.find_one()
+print(x)
+# {'_id': ObjectId('63d79904c5c7052da8b7bc6e'), 'name': 'Amy', 'address': 'Apple st 652'}
+```
+### find()
+find() yöntemi, seçimdeki tüm kayıtları bize döndürür.
+find() yönteminin ilk parametresi bir sorgu nesnesidir. Bu örnekte, parametre vermeyerek koleksiyondaki tüm kayıtları seçen boş bir sorgu nesnesi kullanıyoruz. Özetle SQL de ki *SELECT komutu için find() methodunun parametresini boş bırakmamız yeterlidir.
+
+```
+for x in new_collection.find():
+  print(x) 
+ """
+{'_id': ObjectId('63d79904c5c7052da8b7bc6e'), 'name': 'Amy', 'address': 'Apple st 652'}
+{'_id': ObjectId('63d79904c5c7052da8b7bc6f'), 'name': 'Hannah', 'address': 'Mountain 21'}
+{'_id': ObjectId('63d79904c5c7052da8b7bc70'), 'name': 'Michael', 'address': 'Valley 345'}
+{'_id': ObjectId('63d79904c5c7052da8b7bc71'), 'name': 'Sandy', 'address': 'Ocean blvd 2'}
+{'_id': ObjectId('63d79904c5c7052da8b7bc72'), 'name': 'Betty', 'address': 'Green Grass 1'}
+{'_id': ObjectId('63d79904c5c7052da8b7bc73'), 'name': 'Richard', 'address': 'Sky st 331'}
+{'_id': ObjectId('63d79904c5c7052da8b7bc74'), 'name': 'Susan', 'address': 'One way 98'}
+{'_id': ObjectId('63d79904c5c7052da8b7bc75'), 'name': 'Vicky', 'address': 'Yellow Garden 2'}
+{'_id': ObjectId('63d79904c5c7052da8b7bc76'), 'name': 'Ben', 'address': 'Park Lane 38'}
+{'_id': ObjectId('63d79904c5c7052da8b7bc77'), 'name': 'William', 'address': 'Central st 954'}
+{'_id': ObjectId('63d79904c5c7052da8b7bc78'), 'name': 'Chuck', 'address': 'Main Road 989'}
+{'_id': ObjectId('63d79904c5c7052da8b7bc79'), 'name': 'Viola', 'address': 'Sideway 1633'}
+{'_id': 1, 'name': 'Erkam', 'address': 'Karabük'}
+{'_id': 2, 'name': 'Ensar', 'address': 'İstanbul'}
+{'_id': 3, 'name': 'Duygu', 'address': 'Ankara'}
+{'_id': 4, 'name': 'Enes', 'address': 'İstanbul'}
+{'_id': 5, 'name': 'Ulaş', 'address': 'Sakarya'}
+{'_id': 6, 'name': 'Onur', 'address': 'Isparta'}
+{'_id': 7, 'name': 'Çelik', 'address': 'Bolu'}"""
+```
+
+### find() ile Belirli Verileri Çekme
+find() yönteminin ikinci parametresi, sonuca hangi alanların dahil edileceğini açıklayan bir nesnedir.
+Bu parametre isteğe bağlıdır ve atlanırsa tüm alanlar sonuca dahil edilir.
+
+```
+# id yi getirme ismi ve adresi getir
+for x in new_collection.find({},{ "_id": 0, "name": 1, "address":1}):
+  print(x) 
+"""
+{'name': 'Amy', 'address': 'Apple st 652'}
+{'name': 'Hannah', 'address': 'Mountain 21'}
+{'name': 'Michael', 'address': 'Valley 345'}
+{'name': 'Sandy', 'address': 'Ocean blvd 2'}
+{'name': 'Betty', 'address': 'Green Grass 1'}
+"""
+```
+```
+# Sadece isimleri getir
+for x in new_collection.find({},{ "_id": 0, "name": 1}):
+  print(x) 
+"""
+# Sadece isimleri getir
+for x in new_collection.find({},{ "_id": 0, "name": 1}):
+  print(x) 
+# Sadece isimleri getir
+for x in new_collection.find({},{ "_id": 0, "name": 1}):
+  print(x) 
+{'name': 'Amy'}
+{'name': 'Hannah'}
+{'name': 'Michael'}
+{'name': 'Sandy'}
+{'name': 'Betty'}
+"""
+```
+
+
+
 
 
 
