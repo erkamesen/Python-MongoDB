@@ -5,7 +5,7 @@ MongoDB için hazırladığım notlar.. <br>
 
 # İçerik:
 1. [Giriş](https://github.com/erkamesen/Python-MongoDB#giri%C5%9F)
-2. [NoSQL - MongoDB Nedir?](https://github.com/erkamesen/Python-MongoDB#nosql-nedir-)
+2. [NoSQL - MongoDB Nedir?](https://github.com/erkamesen/Python-MongoDB#nosql---mongodb-nedir-)
 3. [NoSQL Veritabanı Özellikleri](https://github.com/erkamesen/Python-MongoDB#nosql-veritaban%C4%B1-%C3%B6zellikleri)
 4. [NoSQL Veritabanı Türleri](https://github.com/erkamesen/Python-MongoDB#nosql-veritaban%C4%B1-t%C3%BCrleri)
 5. [Başlangıç - Kurulum](https://github.com/erkamesen/Python-MongoDB#ba%C5%9Flang%C4%B1%C3%A7---kurulum) <br>
