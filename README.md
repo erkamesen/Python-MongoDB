@@ -4,33 +4,33 @@ MongoDB için hazırladığım notlar.. <br>
 ![MongoDB_Logo svg](https://user-images.githubusercontent.com/120065120/215358239-4c22ed81-3bfe-46af-962b-b885b63359ce.png)
 
 # İçerik:
-1. [Giriş](https://github.com/erkamesen/Python-MongoDB/edit/main/README.md#giri%C5%9F)
-2. [NoSQL - MongoDB Nedir?](https://github.com/erkamesen/Python-MongoDB/edit/main/README.md#nosql-nedir-)
-3. [NoSQL Veritabanı Özellikleri](https://github.com/erkamesen/Python-MongoDB/edit/main/README.md#nosql-veritaban%C4%B1-%C3%B6zellikleri)
-4. [NoSQL Veritabanı Türleri](https://github.com/erkamesen/Python-MongoDB/edit/main/README.md#nosql-veritaban%C4%B1-t%C3%BCrleri)
-5. [Başlangıç - Kurulum](https://github.com/erkamesen/Python-MongoDB/edit/main/README.md#ba%C5%9Flang%C4%B1%C3%A7---kurulum) <br>
-5.1 [Cluster Oluşturma](https://github.com/erkamesen/Python-MongoDB/edit/main/README.md#cluster-olu%C5%9Fturma) <br>
-5.2 [Bağlantı](https://github.com/erkamesen/Python-MongoDB/edit/main/README.md#ba%C4%9Flant%C4%B1) 
-6. [Insert(Veri Ekleme) Sorgusu](https://github.com/erkamesen/Python-MongoDB/edit/main/README.md#insertveri-ekleme-sorgusu) <br>
-6.1 [insert_one()](https://github.com/erkamesen/Python-MongoDB/edit/main/README.md#insert_one) <br>
-6.2 [insert_many()](https://github.com/erkamesen/Python-MongoDB/edit/main/README.md#insert_many)
-7. [Find(Veri Bulma) Sorgusu](https://github.com/erkamesen/Python-MongoDB/edit/main/README.md#findveri-bulma-sorgusu) <br>
-7.1 [find_one()](https://github.com/erkamesen/Python-MongoDB/edit/main/README.md#find_one) <br>
-7.2 [find()](https://github.com/erkamesen/Python-MongoDB/edit/main/README.md#find) <br>
-7.3 [find() ile Belirli Verileri Çekme](https://github.com/erkamesen/Python-MongoDB/edit/main/README.md#find-ile-belirli-verileri-%C3%A7ekme)
-8. [Query(Filtreleme Sorugları)](https://github.com/erkamesen/Python-MongoDB/edit/main/README.md#queryfiltreleme-sorgular%C4%B1) <br>
-8.1 [Advanced Query](https://github.com/erkamesen/Python-MongoDB/edit/main/README.md#advanced-query)
-9. [Sort(Sıralama) Sorgusu](https://github.com/erkamesen/Python-MongoDB/edit/main/README.md#sorts%C4%B1ralama-sorgusu)
-10. [and - or Sorguları](https://github.com/erkamesen/Python-MongoDB/edit/main/README.md#and---or-sorgular%C4%B1) <br>
-10.1 [and](https://github.com/erkamesen/Python-MongoDB/edit/main/README.md#and) <br>
-10.2 [or](https://github.com/erkamesen/Python-MongoDB/edit/main/README.md#or)
-11. [Update(Güncelleme) Sorguları](https://github.com/erkamesen/Python-MongoDB/edit/main/README.md#updateg%C3%BCncelleme-sorgular%C4%B1) <br>
-11.1 [update_one()](https://github.com/erkamesen/Python-MongoDB/edit/main/README.md#update_one) <br>
-11.2 [update_many()](https://github.com/erkamesen/Python-MongoDB/edit/main/README.md#update_many)
-12. [Limit Sorguları](https://github.com/erkamesen/Python-MongoDB/edit/main/README.md#limit-sorgular%C4%B1)
-13. [Delete Sorguları](https://github.com/erkamesen/Python-MongoDB/edit/main/README.md#delete-sorgular%C4%B1) <br>
-13.1 [delete_one()](https://github.com/erkamesen/Python-MongoDB/edit/main/README.md#delete_one) <br>
-13.2 [delete_many()](https://github.com/erkamesen/Python-MongoDB/edit/main/README.md#delete_many)
+1. [Giriş](https://github.com/erkamesen/Python-MongoDB#giri%C5%9F)
+2. [NoSQL - MongoDB Nedir?](https://github.com/erkamesen/Python-MongoDB#nosql-nedir-)
+3. [NoSQL Veritabanı Özellikleri](https://github.com/erkamesen/Python-MongoDB#nosql-veritaban%C4%B1-%C3%B6zellikleri)
+4. [NoSQL Veritabanı Türleri](https://github.com/erkamesen/Python-MongoDB#nosql-veritaban%C4%B1-t%C3%BCrleri)
+5. [Başlangıç - Kurulum](https://github.com/erkamesen/Python-MongoDB#ba%C5%9Flang%C4%B1%C3%A7---kurulum) <br>
+5.1 [Cluster Oluşturma](https://github.com/erkamesen/Python-MongoDB#cluster-olu%C5%9Fturma) <br>
+5.2 [Bağlantı](https://github.com/erkamesen/Python-MongoDB#ba%C4%9Flant%C4%B1) 
+6. [Insert(Veri Ekleme) Sorgusu](https://github.com/erkamesen/Python-MongoDB#insertveri-ekleme-sorgusu) <br>
+6.1 [insert_one()](https://github.com/erkamesen/Python-MongoDB#insert_one) <br>
+6.2 [insert_many()](https://github.com/erkamesen/Python-MongoDB#insert_many)
+7. [Find(Veri Bulma) Sorgusu](https://github.com/erkamesen/Python-MongoDB#findveri-bulma-sorgusu) <br>
+7.1 [find_one()](https://github.com/erkamesen/Python-MongoDB#find_one) <br>
+7.2 [find()](https://github.com/erkamesen/Python-MongoDB#find) <br>
+7.3 [find() ile Belirli Verileri Çekme](https://github.com/erkamesen/Python-MongoDB#find-ile-belirli-verileri-%C3%A7ekme)
+8. [Query(Filtreleme Sorugları)](https://github.com/erkamesen/Python-MongoDB#queryfiltreleme-sorgular%C4%B1) <br>
+8.1 [Advanced Query](https://github.com/erkamesen/Python-MongoDB#advanced-query)
+9. [Sort(Sıralama) Sorgusu](https://github.com/erkamesen/Python-MongoDB#sorts%C4%B1ralama-sorgusu)
+10. [and - or Sorguları](https://github.com/erkamesen/Python-MongoDB#and---or-sorgular%C4%B1) <br>
+10.1 [and](https://github.com/erkamesen/Python-MongoDB#and) <br>
+10.2 [or](https://github.com/erkamesen/Python-MongoDB#or)
+11. [Update(Güncelleme) Sorguları](https://github.com/erkamesen/Python-MongoDB#updateg%C3%BCncelleme-sorgular%C4%B1) <br>
+11.1 [update_one()](https://github.com/erkamesen/Python-MongoDB#update_one) <br>
+11.2 [update_many()](https://github.com/erkamesen/Python-MongoDB#update_many)
+12. [Limit Sorguları](https://github.com/erkamesen/Python-MongoDB#limit-sorgular%C4%B1)
+13. [Delete Sorguları](https://github.com/erkamesen/Python-MongoDB#delete-sorgular%C4%B1) <br>
+13.1 [delete_one()](https://github.com/erkamesen/Python-MongoDB#delete_one) <br>
+13.2 [delete_many()](https://github.com/erkamesen/Python-MongoDB#delete_many)
 <img width="2451" alt="mdb-vs-sql" src="https://user-images.githubusercontent.com/120065120/215347383-a9f102b0-fcd6-409c-88a7-0610230f6f9d.png">
 
 <!-- Table -->
